@@ -1,0 +1,62 @@
+def leerArchivo(archivo):
+    
+    archivo=open(archivo, "r")
+    datos=csv.DictReader(archivo)
+    return datos
+
+def EscribirArchivo(nombre_archivo, datos, encabezado):
+    
+    with open(nombre_archivo, "w", newline="", encoding="utf-8") as fd:
+        escritor=csv.writer(fd, delimiter="\t")
+        escritor.writerow(encabezado)
+        escritor.writerows(datos)
+
+def solucion():
+    
+    listapromedios=[]
+    lista_datos=leerArchivo("FB.csv")
+    
+    for i in lista_datos:
+        promedio=(((float(i["High"]))+float(i["Low"]))/2)
+        listapromedios.append(promedio)
+    
+    
+    listapromedios=[]
+    lista_datos=leerArchivo("FB.csv")
+    
+    date_lowest_mean=""
+    lowest_mean=500
+    date_highest_mean=""
+    highest_mean=-500
+    
+    for i in lista_datos:
+        promedio=(((float(i["High"]))+float(i["Low"]))/2)
+        
+        if(promedio>highest_mean):
+            highest_mean=promedio
+            date_highest_mean=i["Date"]
+        if(promedio<lowest_mean):
+            lowest_mean=promedio
+            date_lowest_mean=i["Date"]
+    
+
+    archivo=leerArchivo("FB.csv")
+    linea=[]
+    lista_datos=[]
+    for i in archivo:
+        linea.append(i["Date"])
+        promedio=(((float(i["High"]))+float(i["Low"]))/2)
+        linea.append(promedio)
+        if(promedio<239):
+            linea.append("MUY BAJO")
+        elif(promedio>=239 and promedio<265):
+            linea.append("BAJO")
+        elif(promedio>=265 and promedio<291):
+            linea.append("MEDIO")
+        elif(promedio>=291 and promedio<317):
+            linea.append("ALTO")
+        else:
+            linea.append("MUY ALTO")
+    EscribirArchivo("analisis_archivo.csv", lista_datos, ["Fecha","Mean-Min-Max","Concepto"])
+    
+    return date_lowest_mean, lowest_mean, date_highest_mean, highest_mean
